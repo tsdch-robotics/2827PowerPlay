@@ -30,7 +30,7 @@ public class TeleOp1 extends LinearOpMode {
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
+         // step (using the FTC Robot Controller app on the phone).
         frontLeft  = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft  = hardwareMap.get(DcMotor.class, "backLeft");
@@ -40,6 +40,10 @@ public class TeleOp1 extends LinearOpMode {
 
         leftHand = hardwareMap.get(Servo.class, "left_hand");
         rightHand = hardwareMap.get(Servo.class, "right_hand");
+
+        double minposL = 0.3, maxposL = 0.5, minposR = -0.3, maxposR = -0.5;
+
+        double gripposL, gripposR = 0;
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -52,6 +56,8 @@ public class TeleOp1 extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
+        gripposL = maxposL;
+        gripposR = maxposR;
         runtime.reset();
 
         // run until the end of the match (driver presses STOP)
@@ -62,6 +68,8 @@ public class TeleOp1 extends LinearOpMode {
             double rightPower;
             double armVertPower;
             double armHorPower;
+
+            double servoPos1;
 
             // Choose to drive using either Tank Mode, or POV Mode
             // Comment out the method that's not used.  The default below is POV.
@@ -78,10 +86,10 @@ public class TeleOp1 extends LinearOpMode {
                 armVertPower = 0.4;
             }
             else if (gamepad1.b) {
-                armVertPower = -0.15;
+                armVertPower = -0.25;
             }
             else {
-                armVertPower = 0;
+                armVertPower = 0.15;
             }
 
             //setarmhorpower
@@ -95,6 +103,31 @@ public class TeleOp1 extends LinearOpMode {
                 armHorPower = 0;
             }
 
+            /*/ open the gripper on X button if not already at most open position.
+            if (gamepad1.x && gripposR < maxposR) gripposR = gripposR + .01;
+            if (gamepad1.x && gripposL < maxposL) gripposL = gripposL + .01;
+
+            // close the gripper on Y button if not already at the closed position.
+            if (gamepad1.y && gripposL > minposL) gripposL = gripposL - .01;
+            if (gamepad1.y && gripposR > minposR) gripposR = gripposR - .01;*/
+            if (gamepad1.x) {
+                gripposL = + 1;
+                gripposR = + 1;
+            }
+            else if (gamepad1.y) {
+                gripposL = - 1;
+                gripposR = - 1;
+            }
+            else {
+                gripposL = 0;
+                gripposR = 0;
+            }
+
+            //if (gamepad1.x && gripposL < maxposR) gripposL = gripposL - .01;
+
+            // close the gripper on Y button if not already at the closed position.
+          //  if (gamepad1.y && gripposL > minposR) gripposL = gripposL + .01;
+
             //situate servos
 
 
@@ -106,9 +139,14 @@ public class TeleOp1 extends LinearOpMode {
             armVert.setPower(armVertPower);
             armHor.setPower(armHorPower);
 
+            leftHand.setPosition(Range.clip(gripposL, minposL, maxposL));
+            rightHand.setPosition(Range.clip(gripposR, minposR, maxposR));
+
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+            telemetry.addData("Uncontrollable farting", "I cant stop the farting oh my god");
+
             telemetry.update();
         }
     }
