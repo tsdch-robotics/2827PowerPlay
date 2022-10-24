@@ -41,7 +41,7 @@ public class TeleOp1 extends LinearOpMode {
         leftHand = hardwareMap.get(Servo.class, "left_hand");
         rightHand = hardwareMap.get(Servo.class, "right_hand");
 
-        double minposL = 0.3, maxposL = 0.5, minposR = -0.3, maxposR = -0.5;
+        double minposL = 0.3, maxposL = -0.5, minposR = -0.3, maxposR = 1;
 
         double gripposL, gripposR = 0;
 
