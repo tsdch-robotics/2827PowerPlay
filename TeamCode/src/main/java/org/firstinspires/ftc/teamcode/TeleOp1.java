@@ -41,9 +41,7 @@ public class TeleOp1 extends LinearOpMode {
         leftHand = hardwareMap.get(Servo.class, "left_hand");
         rightHand = hardwareMap.get(Servo.class, "right_hand");
 
-        double minposL = 0.3, maxposL = -0.5, minposR = -0.3, maxposR = 1;
-
-        double gripposL, gripposR = 0;
+        double minposL = 0.65, maxposL = 0.8, minposR = 0.35, maxposR = 0.55;
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -56,9 +54,9 @@ public class TeleOp1 extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        gripposL = maxposL;
-        gripposR = maxposR;
         runtime.reset();
+
+        double gripposL = 0.6, gripposR = 0.6;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -68,8 +66,6 @@ public class TeleOp1 extends LinearOpMode {
             double rightPower;
             double armVertPower;
             double armHorPower;
-
-            double servoPos1;
 
             // Choose to drive using either Tank Mode, or POV Mode
             // Comment out the method that's not used.  The default below is POV.
@@ -110,18 +106,7 @@ public class TeleOp1 extends LinearOpMode {
             // close the gripper on Y button if not already at the closed position.
             if (gamepad1.y && gripposL > minposL) gripposL = gripposL - .01;
             if (gamepad1.y && gripposR > minposR) gripposR = gripposR - .01;*/
-            if (gamepad1.x) {
-                gripposL = + 1;
-                gripposR = + 1;
-            }
-            else if (gamepad1.y) {
-                gripposL = - 1;
-                gripposR = - 1;
-            }
-            else {
-                gripposL = 0;
-                gripposR = 0;
-            }
+
 
             //if (gamepad1.x && gripposL < maxposR) gripposL = gripposL - .01;
 
@@ -129,7 +114,17 @@ public class TeleOp1 extends LinearOpMode {
           //  if (gamepad1.y && gripposL > minposR) gripposL = gripposL + .01;
 
             //situate servos
+            // open the gripper on X button if not already at most open position.
+            if (gamepad1.x && gripposL < maxposL) gripposL = gripposL + .01;
 
+            // close the gripper on Y button if not already at the closed position.
+            if (gamepad1.y && gripposL > minposL) gripposL = gripposL - .01;
+
+
+            if (gamepad1.y && gripposR < maxposR) gripposR = gripposR + .01;
+
+            // close the gripper on Y button if not already at the closed position.
+            if (gamepad1.x && gripposR > minposR) gripposR = gripposR - .01;
 
             // Send power to wheels, arms, and servos
             frontLeft.setPower(leftPower);
@@ -139,8 +134,8 @@ public class TeleOp1 extends LinearOpMode {
             armVert.setPower(armVertPower);
             armHor.setPower(armHorPower);
 
-            leftHand.setPosition(Range.clip(gripposL, minposL, maxposL));
-            rightHand.setPosition(Range.clip(gripposR, minposR, maxposR));
+            leftHand.setPosition(gripposL);
+            rightHand.setPosition(gripposR);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
