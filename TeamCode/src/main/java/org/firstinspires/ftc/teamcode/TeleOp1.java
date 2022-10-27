@@ -18,7 +18,7 @@ public class TeleOp1 extends LinearOpMode {
     private DcMotor backLeft = null;
     private DcMotor backRight = null;
     private DcMotor armVert = null;
-    //private DcMotor armHor = null;
+    private DcMotor armHor = null;
 
     private Servo leftHand = null;
     //private Servo rightHand = null;
@@ -128,7 +128,7 @@ public class TeleOp1 extends LinearOpMode {
             armHor.setPower(armHorPower);
 
             leftHand.setPosition(gripposL);
-            rightHand.setPosition(gripposR);
+            //rightHand.setPosition(gripposR);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
