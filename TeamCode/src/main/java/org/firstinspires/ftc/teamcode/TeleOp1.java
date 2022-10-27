@@ -18,10 +18,10 @@ public class TeleOp1 extends LinearOpMode {
     private DcMotor backLeft = null;
     private DcMotor backRight = null;
     private DcMotor armVert = null;
-    private DcMotor armHor = null;
+    //private DcMotor armHor = null;
 
     private Servo leftHand = null;
-    private Servo rightHand = null;
+    //private Servo rightHand = null;
 
     @Override
     public void runOpMode() {
@@ -36,10 +36,10 @@ public class TeleOp1 extends LinearOpMode {
         backLeft  = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
         armVert = hardwareMap.get(DcMotor.class, "armVert");
-        armHor = hardwareMap.get(DcMotor.class, "armHor");
+        //armHor = hardwareMap.get(DcMotor.class, "armHor");
 
         leftHand = hardwareMap.get(Servo.class, "left_hand");
-        rightHand = hardwareMap.get(Servo.class, "right_hand");
+        //rightHand = hardwareMap.get(Servo.class, "right_hand");
 
         double minposL = 0.65, maxposL = 0.8, minposR = 0.35, maxposR = 0.55;
 
@@ -80,24 +80,17 @@ public class TeleOp1 extends LinearOpMode {
             //set armvertpower
             if (gamepad1.a) {
                 armVertPower = 0.4;
+                armHorPower = 0.4;
             }
             else if (gamepad1.b) {
                 armVertPower = -0.25;
+                armHorPower = -0.25;
             }
             else {
                 armVertPower = 0.15;
+                armHorPower = 0.15;
             }
 
-            //setarmhorpower
-            if (gamepad1.dpad_left) {
-                armHorPower = 0.4;
-            }
-            else if (gamepad1.dpad_right) {
-                armHorPower = -0.4;
-            }
-            else {
-                armHorPower = 0;
-            }
 
             /*/ open the gripper on X button if not already at most open position.
             if (gamepad1.x && gripposR < maxposR) gripposR = gripposR + .01;
