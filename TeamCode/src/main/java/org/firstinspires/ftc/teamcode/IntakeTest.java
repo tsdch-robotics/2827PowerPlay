@@ -19,22 +19,27 @@ public class IntakeTest extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        rightWheel  = hardwareMap.get(DcMotor.class, "rightWheel");
-        leftWheel = hardwareMap.get(DcMotor.class, "leftWheel");
+        rightWheel  = hardwareMap.get(DcMotor.class, "frontLeft");
+        leftWheel = hardwareMap.get(DcMotor.class, "frontRight");
 
         double rightPower = 0;
         double leftPower = 0;
 
-        if (gamepad1.a) {
-            rightPower = 0.4;
-            leftPower = 0.4;
-        }
-        else {
-            rightPower = 0;
-            leftPower = 0;
-        }
+        waitForStart();
+        runtime.reset();
 
-        rightWheel.setPower(rightPower);
-        leftWheel.setPower(leftPower);
+        while (opModeIsActive()) {
+            if (gamepad1.a) {
+                rightPower = 0.4;
+                leftPower = 0.4;
+            } else {
+                rightPower = 0;
+                leftPower = 0;
+            }
+
+            rightWheel.setPower(rightPower);
+            leftWheel.setPower(leftPower);
+
+        }
     }
 }
