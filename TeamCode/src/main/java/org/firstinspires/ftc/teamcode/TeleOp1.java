@@ -17,10 +17,10 @@ public class TeleOp1 extends LinearOpMode {
     private DcMotor frontRight = null;
     private DcMotor backLeft = null;
     private DcMotor backRight = null;
-    private DcMotor armVert = null;
-    private DcMotor armHor = null;
+    //private DcMotor armVert = null;
+    //private DcMotor armHor = null;
 
-    private Servo leftHand = null;
+    //private Servo leftHand = null;
     //private Servo rightHand = null;
 
     @Override
@@ -35,10 +35,10 @@ public class TeleOp1 extends LinearOpMode {
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft  = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
-        armVert = hardwareMap.get(DcMotor.class, "armVert");
+        //armVert = hardwareMap.get(DcMotor.class, "armVert");
         //armHor = hardwareMap.get(DcMotor.class, "armHor");
 
-        leftHand = hardwareMap.get(Servo.class, "left_hand");
+        //leftHand = hardwareMap.get(Servo.class, "left_hand");
         //rightHand = hardwareMap.get(Servo.class, "right_hand");
 
         double minposL = 0.65, maxposL = 0.8, minposR = 0.35, maxposR = 0.55;
@@ -124,10 +124,10 @@ public class TeleOp1 extends LinearOpMode {
             frontRight.setPower(rightPower);
             backLeft.setPower(leftPower);
             backRight.setPower(rightPower);
-            armVert.setPower(armVertPower);
-            armHor.setPower(armHorPower);
+            //armVert.setPower(armVertPower);
+            //armHor.setPower(armHorPower);
 
-            leftHand.setPosition(gripposL);
+            //leftHand.setPosition(gripposL);
             //rightHand.setPosition(gripposR);
 
             // Show the elapsed game time and wheel power.
