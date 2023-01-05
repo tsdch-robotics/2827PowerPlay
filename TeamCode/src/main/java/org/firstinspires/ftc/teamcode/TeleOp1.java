@@ -17,7 +17,7 @@ public class TeleOp1 extends LinearOpMode {
     private DcMotor frontRight = null;
     private DcMotor backLeft = null;
     private DcMotor backRight = null;
-    //private DcMotor armVert = null;
+    private DcMotor armVert = null;
     //private DcMotor armHor = null;
 
     //private Servo leftHand = null;
@@ -35,7 +35,7 @@ public class TeleOp1 extends LinearOpMode {
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft  = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
-        //armVert = hardwareMap.get(DcMotor.class, "armVert");
+        armVert = hardwareMap.get(DcMotor.class, "armVert");
         //armHor = hardwareMap.get(DcMotor.class, "armHor");
 
         //leftHand = hardwareMap.get(Servo.class, "left_hand");
@@ -79,15 +79,15 @@ public class TeleOp1 extends LinearOpMode {
 
             //set armvertpower
             if (gamepad1.a) {
-                armVertPower = 0.4;
+                armVertPower = 0.7;
                 armHorPower = 0.4;
             }
             else if (gamepad1.b) {
-                armVertPower = -0.25;
+                armVertPower = 0;
                 armHorPower = -0.25;
             }
             else {
-                armVertPower = 0.15;
+                armVertPower = 0.2;
                 armHorPower = 0.15;
             }
 
@@ -124,7 +124,7 @@ public class TeleOp1 extends LinearOpMode {
             frontRight.setPower(rightPower);
             backLeft.setPower(leftPower);
             backRight.setPower(rightPower);
-            //armVert.setPower(armVertPower);
+            armVert.setPower(armVertPower);
             //armHor.setPower(armHorPower);
 
             //leftHand.setPosition(gripposL);
