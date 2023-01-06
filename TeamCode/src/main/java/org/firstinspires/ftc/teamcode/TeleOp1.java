@@ -41,7 +41,7 @@ public class TeleOp1 extends LinearOpMode {
         leftHand = hardwareMap.get(Servo.class, "left_hand");
         rightHand = hardwareMap.get(Servo.class, "right_hand");
 
-        double minposL = 0.65, maxposL = 0.8, minposR = 0.35, maxposR = 0.55;
+        double minposL = 0, maxposL = 0, minposR = -0.3, maxposR = 0.45;
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -56,7 +56,7 @@ public class TeleOp1 extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        double gripposL = 0.6, gripposR = 0.6;
+        double gripposL = 0.5, gripposR = -0.25;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -72,16 +72,15 @@ public class TeleOp1 extends LinearOpMode {
 
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
-
+/*
             double left = gamepad1.left_stick_y;
             double right = gamepad1.right_stick_y;
-
-            /*
+*/
             double drive = gamepad1.left_stick_y;
             double turn  =  -gamepad1.right_stick_x;
 
             leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-            rightPower   = Range.clip(drive - turn, -1.0, 1.0) ; */
+            rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
 
             //set armvertpower
             if (gamepad1.a) {
@@ -93,52 +92,34 @@ public class TeleOp1 extends LinearOpMode {
                 //armHorPower = -0.25;
             }
             else {
-                armVertPower = 0.2;
+                armVertPower = 0.23;
                 //armHorPower = 0.15;
             }
 
 
-            /*/ open the gripper on X button if not already at most open position.
+            //open the gripper on X button if not already at most open position.
             if (gamepad1.x && gripposR < maxposR) gripposR = gripposR + .01;
-            if (gamepad1.x && gripposL < maxposL) gripposL = gripposL + .01;
+            //if (gamepad1.x && gripposL < maxposL) gripposL = gripposL + .01;
 
             // close the gripper on Y button if not already at the closed position.
-            if (gamepad1.y && gripposL > minposL) gripposL = gripposL - .01;
-            if (gamepad1.y && gripposR > minposR) gripposR = gripposR - .01;*/
+            //if (gamepad1.y && gripposL > minposL) gripposL = gripposL - .01;
+            if (gamepad1.y && gripposR > minposR) gripposR = gripposR - .01;
 
-
-            //if (gamepad1.x && gripposL < maxposR) gripposL = gripposL - .01;
-
-            // close the gripper on Y button if not already at the closed position.
-          //  if (gamepad1.y && gripposL > minposR) gripposL = gripposL + .01;
-
-            //situate servos
-            // open the gripper on X button if not already at most open position.
-            if (gamepad1.x && gripposL < maxposL) gripposL = gripposL + .01;
-
-            // close the gripper on Y button if not already at the closed position.
-            if (gamepad1.y && gripposL > minposL) gripposL = gripposL - .01;
-
-
-            if (gamepad1.y && gripposR < maxposR) gripposR = gripposR + .01;
-
-            // close the gripper on Y button if not already at the closed position.
-            if (gamepad1.x && gripposR > minposR) gripposR = gripposR - .01;
 
             // Send power to wheels, arms, and servos
-            frontLeft.setPower(left);
-            frontRight.setPower(right);
-            backLeft.setPower(left);
-            backRight.setPower(right);
+            frontLeft.setPower(leftPower);
+            frontRight.setPower(rightPower);
+            backLeft.setPower(leftPower);
+            backRight.setPower(rightPower);
             armVert.setPower(armVertPower);
             //armHor.setPower(armHorPower);
 
             leftHand.setPosition(gripposL);
-            //rightHand.setPosition(gripposR);
+            rightHand.setPosition(gripposR);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+            //telemetry.addData("Motors", "left (%.2f), right (%.2f)", left, right);
             telemetry.addData("Uncontrollable farting", "I cant stop the farting oh my god");
 
             telemetry.update();
