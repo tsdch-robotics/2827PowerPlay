@@ -20,8 +20,8 @@ public class TeleOp1 extends LinearOpMode {
     private DcMotor armVert = null;
     //private DcMotor armHor = null;
 
-    //private Servo leftHand = null;
-    //private Servo rightHand = null;
+    private Servo leftHand = null;
+    private Servo rightHand = null;
 
     @Override
     public void runOpMode() {
@@ -38,8 +38,8 @@ public class TeleOp1 extends LinearOpMode {
         armVert = hardwareMap.get(DcMotor.class, "armVert");
         //armHor = hardwareMap.get(DcMotor.class, "armHor");
 
-        //leftHand = hardwareMap.get(Servo.class, "left_hand");
-        //rightHand = hardwareMap.get(Servo.class, "right_hand");
+        leftHand = hardwareMap.get(Servo.class, "left_hand");
+        rightHand = hardwareMap.get(Servo.class, "right_hand");
 
         double minposL = 0.65, maxposL = 0.8, minposR = 0.35, maxposR = 0.55;
 
@@ -72,23 +72,29 @@ public class TeleOp1 extends LinearOpMode {
 
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
+
+            double left = gamepad1.left_stick_y;
+            double right = gamepad1.right_stick_y;
+
+            /*
             double drive = gamepad1.left_stick_y;
             double turn  =  -gamepad1.right_stick_x;
+
             leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-            rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+            rightPower   = Range.clip(drive - turn, -1.0, 1.0) ; */
 
             //set armvertpower
             if (gamepad1.a) {
                 armVertPower = 0.7;
-                armHorPower = 0.4;
+                //armHorPower = 0.4;
             }
             else if (gamepad1.b) {
                 armVertPower = 0;
-                armHorPower = -0.25;
+                //armHorPower = -0.25;
             }
             else {
                 armVertPower = 0.2;
-                armHorPower = 0.15;
+                //armHorPower = 0.15;
             }
 
 
@@ -120,14 +126,14 @@ public class TeleOp1 extends LinearOpMode {
             if (gamepad1.x && gripposR > minposR) gripposR = gripposR - .01;
 
             // Send power to wheels, arms, and servos
-            frontLeft.setPower(leftPower);
-            frontRight.setPower(rightPower);
-            backLeft.setPower(leftPower);
-            backRight.setPower(rightPower);
+            frontLeft.setPower(left);
+            frontRight.setPower(right);
+            backLeft.setPower(left);
+            backRight.setPower(right);
             armVert.setPower(armVertPower);
             //armHor.setPower(armHorPower);
 
-            //leftHand.setPosition(gripposL);
+            leftHand.setPosition(gripposL);
             //rightHand.setPosition(gripposR);
 
             // Show the elapsed game time and wheel power.
