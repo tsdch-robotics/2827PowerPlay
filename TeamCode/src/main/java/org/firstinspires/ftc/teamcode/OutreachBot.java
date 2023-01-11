@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="TeleOp1", group="Linear Opmode")
+@TeleOp(name="OutreachBot", group="Linear Opmode")
 public class OutreachBot extends LinearOpMode {
 
     // Declare OpMode members.
