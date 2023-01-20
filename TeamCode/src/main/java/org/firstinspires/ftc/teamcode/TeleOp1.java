@@ -41,7 +41,7 @@ public class TeleOp1 extends LinearOpMode {
         leftHand = hardwareMap.get(Servo.class, "left_hand");
         //rightHand = hardwareMap.get(Servo.class, "right_hand");
 
-        double minposL = 0.55, maxposL = 0.73, minposR = 0.55, maxposR = 0.76;
+        double minposL = 0.4, maxposL = 0.73, minposR = 0.35, maxposR = 0.6;
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -56,7 +56,7 @@ public class TeleOp1 extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        double gripposL = 0.7, gripposR = 0.7;
+        double gripposL = 0.7, gripposR = 0.6;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -83,16 +83,16 @@ public class TeleOp1 extends LinearOpMode {
             rightPower = gamepad1.right_stick_y ;
 
             //set armvertpower
-            if (gamepad1.a) {
-                armVertPower = 0;
+            if (gamepad1.left_trigger > 0) {
+                armVertPower = 0.7;
                 //armHorPower = 0.4;
             }
-            else if (gamepad1.b) {
-                armVertPower = 0;
+            else if (gamepad1.right_trigger > 0) {
+                armVertPower = -0.1;
                 //armHorPower = -0.25;
             }
             else {
-                armVertPower = 0;
+                armVertPower = 0.23;
                 //armHorPower = 0.15;
             }
 
@@ -100,17 +100,17 @@ public class TeleOp1 extends LinearOpMode {
 
 
             //open the gripper on X button if not already at most open position.
-            if (gamepad1.x && gripposR < maxposR) gripposR = gripposR + .01;
+            if (gamepad1.left_bumper && gripposR < maxposR) gripposR = gripposR + .01;
             //if (gamepad1.x && gripposL < maxposL) gripposL = gripposL + .01;
 
             // close the gripper on Y button if not already at the closed position.
             //if (gamepad1.y && gripposL > minposL) gripposL = gripposL - .01;
-            if (gamepad1.y && gripposR > minposR) gripposR = gripposR - .01;
+            if (gamepad1.right_bumper && gripposR > minposR) gripposR = gripposR - .01;
 
 
             // Send power to wheels, arms, and servos
-            frontLeft.setPower(leftPower);
-            frontRight.setPower(rightPower);
+            frontLeft.setPower(0.75 * leftPower);
+            frontRight.setPower(0.75 * rightPower);
             backLeft.setPower(leftPower);
             backRight.setPower(rightPower);
             armVert.setPower(armVertPower);
