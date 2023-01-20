@@ -39,9 +39,9 @@ public class TeleOp1 extends LinearOpMode {
         //armHor = hardwareMap.get(DcMotor.class, "armHor");
 
         leftHand = hardwareMap.get(Servo.class, "left_hand");
-        rightHand = hardwareMap.get(Servo.class, "right_hand");
+        //rightHand = hardwareMap.get(Servo.class, "right_hand");
 
-        double minposL = 0, maxposL = 0, minposR = -0.3, maxposR = 0.45;
+        double minposL = 0.55, maxposL = 0.73, minposR = 0.55, maxposR = 0.76;
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -56,7 +56,7 @@ public class TeleOp1 extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        double gripposL = 0.5, gripposR = -0.25;
+        double gripposL = 0.7, gripposR = 0.7;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -79,12 +79,12 @@ public class TeleOp1 extends LinearOpMode {
             leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
             rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
 */
-            leftPower  = -gamepad1.left_stick_y ;
-            rightPower = -gamepad1.right_stick_y ;
+            leftPower  = gamepad1.left_stick_y ;
+            rightPower = gamepad1.right_stick_y ;
 
             //set armvertpower
             if (gamepad1.a) {
-                armVertPower = 0.7;
+                armVertPower = 0;
                 //armHorPower = 0.4;
             }
             else if (gamepad1.b) {
@@ -92,9 +92,11 @@ public class TeleOp1 extends LinearOpMode {
                 //armHorPower = -0.25;
             }
             else {
-                armVertPower = 0.23;
+                armVertPower = 0;
                 //armHorPower = 0.15;
             }
+
+            //0.23
 
 
             //open the gripper on X button if not already at most open position.
@@ -114,13 +116,13 @@ public class TeleOp1 extends LinearOpMode {
             armVert.setPower(armVertPower);
             //armHor.setPower(armHorPower);
 
-            leftHand.setPosition(gripposL);
-            rightHand.setPosition(gripposR);
+            leftHand.setPosition(gripposR);
+            //rightHand.setPosition(gripposR);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             //telemetry.addData("Motors", "left (%.2f), right (%.2f)", left, right);
-            telemetry.addData("Uncontrollable farting", "I cant stop the farting oh my god");
+            //telemetry.addData("Uncontrollable farting", "I cant stop the farting oh my god");
 
             telemetry.update();
         }
