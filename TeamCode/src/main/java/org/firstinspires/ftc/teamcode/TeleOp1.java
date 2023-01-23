@@ -41,7 +41,7 @@ public class TeleOp1 extends LinearOpMode {
         leftHand = hardwareMap.get(Servo.class, "left_hand");
         //rightHand = hardwareMap.get(Servo.class, "right_hand");
 
-        double minposL = 0.4, maxposL = 0.73, minposR = 0.35, maxposR = 0.6;
+        double minposL = 0.4, maxposL = 0.73, minposR = 0.15, maxposR = 0.4;
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -56,7 +56,7 @@ public class TeleOp1 extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        double gripposL = 0.7, gripposR = 0.6;
+        double gripposL = 0.7, gripposR = 0.4;
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -88,11 +88,11 @@ public class TeleOp1 extends LinearOpMode {
                 //armHorPower = 0.4;
             }
             else if (gamepad1.right_trigger > 0) {
-                armVertPower = -0.1;
+                armVertPower = 0;
                 //armHorPower = -0.25;
             }
             else {
-                armVertPower = 0.23;
+                armVertPower = 0.08;
                 //armHorPower = 0.15;
             }
 
@@ -108,11 +108,19 @@ public class TeleOp1 extends LinearOpMode {
             if (gamepad1.right_bumper && gripposR > minposR) gripposR = gripposR - .01;
 
 
+            if (gamepad1.dpad_left) {
+                gripposR = gripposR + 0.05;
+            }
+            if (gamepad1.dpad_right) {
+                gripposR = gripposR - 0.05;
+            }
+
+
             // Send power to wheels, arms, and servos
             frontLeft.setPower(0.75 * leftPower);
             frontRight.setPower(0.75 * rightPower);
-            backLeft.setPower(leftPower);
-            backRight.setPower(rightPower);
+            backLeft.setPower(0.75 * leftPower);
+            backRight.setPower(0.75 * rightPower);
             armVert.setPower(armVertPower);
             //armHor.setPower(armHorPower);
 
