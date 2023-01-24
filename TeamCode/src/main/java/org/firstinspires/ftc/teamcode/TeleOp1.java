@@ -88,7 +88,7 @@ public class TeleOp1 extends LinearOpMode {
                 //armHorPower = 0.4;
             }
             else if (gamepad1.right_trigger > 0) {
-                armVertPower = 0;
+                armVertPower = -0.2;
                 //armHorPower = -0.25;
             }
             else {
