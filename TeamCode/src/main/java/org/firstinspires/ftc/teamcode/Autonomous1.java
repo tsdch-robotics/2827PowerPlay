@@ -33,7 +33,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Autonomous1", group="Linear Opmode")
+@Autonomous(name="ScrimmageAuto", group="Linear Opmode")
 public class Autonomous1 extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -62,6 +62,8 @@ public class Autonomous1 extends LinearOpMode {
     static final double     DRIVE_SPEED             = 0.6;
     static final double     TURN_SPEED              = 0.5;
 
+    public enum Direction {left, right;}
+
     @Override
     public void runOpMode() {
 
@@ -78,10 +80,10 @@ public class Autonomous1 extends LinearOpMode {
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        frontLeft.setDirection(DcMotor.Direction.REVERSE);
-        frontRight.setDirection(DcMotor.Direction.FORWARD);
-        backLeft.setDirection(DcMotor.Direction.REVERSE);
-        backRight.setDirection(DcMotor.Direction.FORWARD);
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
 
         frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -103,12 +105,23 @@ public class Autonomous1 extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-
+/*
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED,  10,  10, 5.0);  // 
-        encoderDrive(TURN_SPEED,   12, -12, 4.0);  //
-        encoderDrive(DRIVE_SPEED, 10, 10, 4.0);  // 
+        encoderDrive(DRIVE_SPEED,  49,  49, 5.0);  //
+        encoderDrive(TURN_SPEED,   22, -22, 4.0);  //
+        encoderDrive(DRIVE_SPEED,  20,  20, 5.0);
+
+        encoderDrive(DRIVE_SPEED,  -40,  -7, 5.0);
+        encoderDrive(DRIVE_SPEED,  7,  40, 5.0);
+        */
+        encoderStrafe(.3, 20, Direction.left, 3.0);
+        encoderStrafe(.3, 20, Direction.right, 3.0);
+        encoderStrafe(.3, 20, Direction.left, 3.0);
+        encoderStrafe(.3, 20, Direction.right, 3.0);
+
+
+
 
         telemetry.addData("Path", "Complete");
         telemetry.update();
@@ -124,22 +137,24 @@ public class Autonomous1 extends LinearOpMode {
      *  3) Driver stops the opmode running.
      */
     public void encoderDrive(double speed, double leftInches, double rightInches, double timeoutS) {
-        int newLeftTarget;
-        int newRightTarget;
+        int newFLeftTarget;
+        int newFRightTarget;
+        int newBLeftTarget;
+        int newBRightTarget;
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newLeftTarget = frontLeft.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            newRightTarget = frontRight.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-            newLeftTarget = backLeft.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-            newRightTarget = backRight.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            newFLeftTarget = frontLeft.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newFRightTarget = frontRight.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            newBLeftTarget = backLeft.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
+            newBRightTarget = backRight.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
 
-            frontLeft.setTargetPosition(newLeftTarget);
-            frontRight.setTargetPosition(newRightTarget);
-            backLeft.setTargetPosition(newLeftTarget);
-            backRight.setTargetPosition(newRightTarget);
+            frontLeft.setTargetPosition(newFLeftTarget);
+            frontRight.setTargetPosition(newFRightTarget);
+            backLeft.setTargetPosition(newBLeftTarget);
+            backRight.setTargetPosition(newBRightTarget);
 
             // Turn On RUN_TO_POSITION
             frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -165,7 +180,7 @@ public class Autonomous1 extends LinearOpMode {
                     (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy())) {
 
                 // Display it for the driver.
-                telemetry.addData("Running to",  " %7d :%7d", newLeftTarget,  newRightTarget);
+                telemetry.addData("Running to",  " %7d :%7d", newFLeftTarget,  newFRightTarget);
                 //telemetry.addData("Currently at",  " at %7d :%7d", leftDrive.getCurrentPosition(), rightDrive.getCurrentPosition());
                 telemetry.update();
             }
@@ -182,7 +197,70 @@ public class Autonomous1 extends LinearOpMode {
             backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            sleep(200);   // optional pause after each move.
+            sleep(400);   // optional pause after each move.
+        }
+    }
+
+    public void encoderStrafe (double strafeSpeed, double inches, Direction direction, double timeoutS) {
+        int newFrontLeftTarget;
+        int newFrontRightTarget;
+        int newBackLeftTarget;
+        int newBackRightTarget;
+
+        if (opModeIsActive()) {
+            newFrontLeftTarget = frontLeft.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH);
+            newFrontRightTarget = frontRight.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH);
+            newBackLeftTarget = backLeft.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH);
+            newBackRightTarget = backRight.getCurrentPosition() + (int) (inches * COUNTS_PER_INCH);
+
+
+
+            if (direction == Direction.right) {
+                frontLeft.setTargetPosition(newFrontLeftTarget);
+                frontRight.setTargetPosition(-newFrontRightTarget);
+                backLeft.setTargetPosition(-newBackLeftTarget);
+                backRight.setTargetPosition(newBackRightTarget);
+            }else {
+                frontLeft.setTargetPosition(-newFrontLeftTarget);
+                frontRight.setTargetPosition(newFrontRightTarget);
+                backLeft.setTargetPosition(newBackLeftTarget);
+                backRight.setTargetPosition(-newBackRightTarget);
+            }
+
+            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            runtime.reset();
+            frontLeft.setPower(Math.abs(strafeSpeed));
+            frontRight.setPower(Math.abs(strafeSpeed));
+            backLeft.setPower(Math.abs(strafeSpeed));
+            backRight.setPower(Math.abs(strafeSpeed));
+
+            while (opModeIsActive() && (runtime.seconds() < timeoutS) && (frontLeft.isBusy() && frontRight.isBusy() && backLeft.isBusy() && backRight.isBusy()))
+                ;
+            {
+                telemetry.addData("Path1", "Running to %7d :%7d :%7d :%7d", newFrontLeftTarget, newFrontRightTarget, newBackLeftTarget, newBackRightTarget);
+                //telemetry.addData("Path1", "Running to %7d :%7d :%7d :%7d", robot.DriveFrontLeft, robot.DriveFrontRight, robot.DriveBackLeft, robot.DriveBackRight);
+                telemetry.update();
+            }
+            frontLeft.setPower(0);
+            frontRight.setPower(0);
+            backLeft.setPower(0);
+            backRight.setPower(0);
+
+            frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            sleep(500);
         }
     }
 }
