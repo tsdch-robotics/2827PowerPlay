@@ -59,8 +59,14 @@ public class Autonomous1 extends LinearOpMode {
     static final double     WHEEL_DIAMETER_INCHES   = 3.78 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.5);
-    static final double     DRIVE_SPEED             = 0.6;
-    static final double     TURN_SPEED              = 0.5;
+    static final double DRIVE_SPEED = 0.6;
+    static final double TURN_SPEED = 0.5;
+    static final double ARM_SPEED_UP = 0.7;
+    static final double ARM_SPEED_DOWN = -0.35;
+    static final double ARM_SPEED_HOLD = 0.08;
+
+    static final double openPos = 0.43;
+    static final double closePos = 0.15;
 
     public enum Direction {left, right;}
 
@@ -105,21 +111,21 @@ public class Autonomous1 extends LinearOpMode {
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-/*
+
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED,  49,  49, 5.0);  //
-        encoderDrive(TURN_SPEED,   22, -22, 4.0);  //
-        encoderDrive(DRIVE_SPEED,  20,  20, 5.0);
+        leftHand.setPosition(closePos);
+        sleep(1000);
+        encoderDrive(DRIVE_SPEED, ARM_SPEED_UP, 49, 49, 20, 5.0);
+        staticArm(ARM_SPEED_HOLD, 50, 2);
+        encoderDrive(DRIVE_SPEED, ARM_SPEED_DOWN, 49, 49, 20, 5.0);
 
-        encoderDrive(DRIVE_SPEED,  -40,  -7, 5.0);
-        encoderDrive(DRIVE_SPEED,  7,  40, 5.0);
-        */
+        /*
         encoderStrafe(.3, 20, Direction.left, 3.0);
         encoderStrafe(.3, 20, Direction.right, 3.0);
         encoderStrafe(.3, 20, Direction.left, 3.0);
         encoderStrafe(.3, 20, Direction.right, 3.0);
-
+*/
 
 
 
@@ -136,11 +142,12 @@ public class Autonomous1 extends LinearOpMode {
      *  2) Move runs out of time
      *  3) Driver stops the opmode running.
      */
-    public void encoderDrive(double speed, double leftInches, double rightInches, double timeoutS) {
+    public void encoderDrive(double speed, double armSpeed, double leftInches, double rightInches, double armInches, double timeoutS) {
         int newFLeftTarget;
         int newFRightTarget;
         int newBLeftTarget;
         int newBRightTarget;
+        int newArmTarget;
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
@@ -150,17 +157,21 @@ public class Autonomous1 extends LinearOpMode {
             newFRightTarget = frontRight.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
             newBLeftTarget = backLeft.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
             newBRightTarget = backRight.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
+            newArmTarget = armVert.getCurrentPosition() + (int)(armInches * COUNTS_PER_INCH);
+
 
             frontLeft.setTargetPosition(newFLeftTarget);
             frontRight.setTargetPosition(newFRightTarget);
             backLeft.setTargetPosition(newBLeftTarget);
             backRight.setTargetPosition(newBRightTarget);
+            armVert.setTargetPosition(newArmTarget);
 
             // Turn On RUN_TO_POSITION
             frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            armVert.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time and start motion.
             runtime.reset();
@@ -168,6 +179,7 @@ public class Autonomous1 extends LinearOpMode {
             frontRight.setPower(Math.abs(speed));
             backLeft.setPower(Math.abs(speed));
             backRight.setPower(Math.abs(speed));
+            armVert.setPower(Math.abs(armSpeed));
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -190,14 +202,16 @@ public class Autonomous1 extends LinearOpMode {
             frontRight.setPower(0);
             backLeft.setPower(0);
             backRight.setPower(0);
+            armVert.setPower(0);
 
             // Turn off RUN_TO_POSITION
             frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            armVert.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            sleep(400);   // optional pause after each move.
+            sleep(0);   // optional pause after each move.
         }
     }
 
@@ -260,7 +274,46 @@ public class Autonomous1 extends LinearOpMode {
             backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            sleep(500);
+            sleep(0);
+        }
+    }
+
+    public void staticArm (double armSpeed, double armInches, double timeoutS) {
+        int newArmTarget;
+
+        newArmTarget = armVert.getCurrentPosition() + (int)(armInches * COUNTS_PER_INCH);
+
+        armVert.setTargetPosition(newArmTarget);
+
+        armVert.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        armVert.setPower(Math.abs(armSpeed));
+
+        while (opModeIsActive() &&
+                (runtime.seconds() < timeoutS) &&
+                (armVert.isBusy())) {
+
+            // Display it for the driver.
+            //telemetry.addData("Holding my poop");
+            //telemetry.addData("Currently at",  " at %7d :%7d", leftDrive.getCurrentPosition(), rightDrive.getCurrentPosition());
+            telemetry.update();
+        }
+
+        armVert.setPower(0);
+
+        armVert.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void sleep (double timeoutS) {
+        while (opModeIsActive() &&
+                (runtime.seconds() < timeoutS)) {
+
+            // Display it for the driver.
+            //telemetry.addData("Running to",  " %7d :%7d", newFLeftTarget,  newFRightTarget);
+            //telemetry.addData("Currently at",  " at %7d :%7d", leftDrive.getCurrentPosition(), rightDrive.getCurrentPosition());
+            telemetry.update();
+
+            sleep(timeoutS);
         }
     }
 }
