@@ -68,7 +68,7 @@ public class Autonomous1 extends LinearOpMode {
     static final double openPos = 0.43;
     static final double closePos = 0.15;
 
-    public enum Direction {left, right;}
+    private enum Direction {left, right;}
 
     @Override
     public void runOpMode() {
