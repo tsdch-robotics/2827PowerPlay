@@ -26,6 +26,7 @@ public class TeleOp2 extends LinearOpMode {
     static final int highGoal = 20;
     static final int medGoal = 15;
     static final int lowGoal = 10;
+    private int most = 0;
 
     @Override
     public void runOpMode() {
@@ -54,10 +55,10 @@ public class TeleOp2 extends LinearOpMode {
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
-/*
+
         armVert.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         armVert.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-*/
+
 
 
         // Wait for the game to start (driver presses PLAY)
@@ -90,7 +91,7 @@ public class TeleOp2 extends LinearOpMode {
 /*
             leftPower  = gamepad1.left_stick_y ;
             rightPower = gamepad1.right_stick_y ;
-*/
+
             //set armvertpower
             if (gamepad1.left_trigger > 0) {
                 armVertPower = 0.9;
@@ -104,8 +105,30 @@ public class TeleOp2 extends LinearOpMode {
                 armVertPower = 0.08;
                 //armHorPower = 0.15;
             }
-
+*/
             //0.23
+
+            if (gamepad1.a){
+                armVert.setTargetPosition(0); //level at 0, grabbing
+                armVert.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                armVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                armVert.setPower(0.4);
+                most = armVert.getCurrentPosition();
+            }
+            if (gamepad1.b){
+                armVert.setTargetPosition(200); //level at 0, grabbing
+                armVert.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                armVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                armVert.setPower(0.4);
+                most = armVert.getCurrentPosition();
+            }
+            if (gamepad1.y){
+                armVert.setTargetPosition(500); //level at 0, grabbing
+                armVert.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                armVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                armVert.setPower(0.4);
+                most = armVert.getCurrentPosition();
+            }
 
 
             //open the gripper on X button if not already at most open position.
@@ -140,7 +163,7 @@ public class TeleOp2 extends LinearOpMode {
             frontRight.setPower(0.7*rightPower);
             backLeft.setPower(0.7*leftPower);
             backRight.setPower(0.7*rightPower);
-            armVert.setPower(armVertPower);
+            //armVert.setPower(armVertPower);
             //armHor.setPower(armHorPower);
 
             leftHand.setPosition(gripposR);
