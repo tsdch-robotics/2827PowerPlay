@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode.Auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.openftc.apriltag.AprilTagDetection;
@@ -9,12 +13,15 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
+import org.firstinspires.ftc.teamcode.Hardware1;
 
 import java.util.ArrayList;
 
-@TeleOp
+@Autonomous
 public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
 {
+    Hardware1 robot = new Hardware1();
+
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
@@ -37,11 +44,67 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
     int MIDDLE = 2;
     int RIGHT = 3;
 
+    //Auto motor and servo definitions
+    private DcMotorEx frontLeft = null;
+    private DcMotorEx frontRight = null;
+    private DcMotorEx backLeft = null;
+    private DcMotorEx backRight = null;
+
+    private DcMotorEx armVert = null;
+
+    private Servo leftHand = null;
+
+    private ElapsedTime runtime = new ElapsedTime();
+
+    static final double     COUNTS_PER_MOTOR_REV    = 537.7 ;    // eg: TETRIX Motor Encoder
+    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
+    static final double     WHEEL_DIAMETER_INCHES   = 3.78 ;     // For figuring circumference
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.5);
+    static final double DRIVE_SPEED = 0.6;
+    static final double TURN_SPEED = 0.5;
+    static final double ARM_SPEED_UP = 0.7;
+    static final double ARM_SPEED_DOWN = -0.35;
+    static final double ARM_SPEED_HOLD = 0.08;
+
+    static final double openPos = 0.43;
+    static final double closePos = 0.15;
+
+    private enum Direction {left, right;}
+
     AprilTagDetection tagOfInterest = null;
 
     @Override
     public void runOpMode()
     {
+        //Set up motors and servos
+        frontLeft  = hardwareMap.get(DcMotorEx.class, "frontLeft");
+        frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
+        backLeft  = hardwareMap.get(DcMotorEx.class, "backLeft");
+        backRight = hardwareMap.get(DcMotorEx.class, "backRight");
+
+        armVert = hardwareMap.get(DcMotorEx.class, "armVert");
+
+        leftHand = hardwareMap.get(Servo.class, "left_hand");
+
+        // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
+        // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
+        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
+
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        //Set up camera
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
@@ -68,8 +131,7 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
          * The INIT-loop:
          * This REPLACES waitForStart!
          */
-        while (!isStarted() && !isStopRequested())
-        {
+        while (!isStarted() && !isStopRequested()) {
             ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
 
             if(currentDetections.size() != 0)
@@ -147,7 +209,8 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
 
         /* Actually do something useful */
         if(tagOfInterest == null || tagOfInterest.id == LEFT) {
-            //code
+            //frontLeft.setPower(1);
+            robot.encoderDrive(0.8,0.8,100,100);
         }
         else if (tagOfInterest.id == MIDDLE) {
             //code
@@ -158,7 +221,7 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
 
 
         /* You wouldn't have this in your autonomous, this is just to prevent the sample from ending */
-        while (opModeIsActive()) {sleep(20);}
+        //while (opModeIsActive()) {sleep(20);}
     }
 
     void tagToTelemetry(AprilTagDetection detection)
