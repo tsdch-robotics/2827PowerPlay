@@ -23,6 +23,10 @@ public class TeleOp2 extends LinearOpMode {
     private Servo leftHand = null;
     private Servo rightHand = null;
 
+    static final int highGoal = 20;
+    static final int medGoal = 15;
+    static final int lowGoal = 10;
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized yuh");
@@ -30,7 +34,7 @@ public class TeleOp2 extends LinearOpMode {
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
-         // step (using the FTC Robot Controller app on the phone).
+        // step (using the FTC Robot Controller app on the phone).
         frontLeft  = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft  = hardwareMap.get(DcMotor.class, "backLeft");
@@ -41,7 +45,7 @@ public class TeleOp2 extends LinearOpMode {
         leftHand = hardwareMap.get(Servo.class, "left_hand");
         //rightHand = hardwareMap.get(Servo.class, "right_hand");
 
-        double minposL = 0.4, maxposL = 0.73, minposR = 0.08, maxposR = 0.35;
+        double minposL = 0.4, maxposL = 0.73, minposR = 0.1, maxposR = 0.43;
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -50,6 +54,10 @@ public class TeleOp2 extends LinearOpMode {
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
+/*
+        armVert.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armVert.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+*/
 
 
         // Wait for the game to start (driver presses PLAY)
@@ -85,11 +93,11 @@ public class TeleOp2 extends LinearOpMode {
 */
             //set armvertpower
             if (gamepad1.left_trigger > 0) {
-                armVertPower = 0.7;
+                armVertPower = 0.9;
                 //armHorPower = 0.4;
             }
             else if (gamepad1.right_trigger > 0) {
-                armVertPower = -0.35;
+                armVertPower = -0.45;
                 //armHorPower = -0.25;
             }
             else {
@@ -128,10 +136,10 @@ public class TeleOp2 extends LinearOpMode {
 
 */
             // Send power to wheels, arms, and servos
-            frontLeft.setPower(leftPower);
-            frontRight.setPower(rightPower);
-            backLeft.setPower(leftPower);
-            backRight.setPower(rightPower);
+            frontLeft.setPower(0.7*leftPower);
+            frontRight.setPower(0.7*rightPower);
+            backLeft.setPower(0.7*leftPower);
+            backRight.setPower(0.7*rightPower);
             armVert.setPower(armVertPower);
             //armHor.setPower(armHorPower);
 
