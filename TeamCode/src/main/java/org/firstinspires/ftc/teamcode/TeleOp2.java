@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="TeleOp1", group="Linear Opmode")
+@TeleOp(name="TeleOp2", group="Linear Opmode")
 public class TeleOp2 extends LinearOpMode {
 
     // Declare OpMode members.
@@ -88,7 +88,7 @@ public class TeleOp2 extends LinearOpMode {
 
             leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
             rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
-/*
+
             leftPower  = gamepad1.left_stick_y ;
             rightPower = gamepad1.right_stick_y ;
 
@@ -105,24 +105,24 @@ public class TeleOp2 extends LinearOpMode {
                 armVertPower = 0.08;
                 //armHorPower = 0.15;
             }
-*/
+/*
             //0.23
 
-            if (gamepad1.a){
+            if (gamepad1.a && most != lowGoal){
                 armVert.setTargetPosition(0); //level at 0, grabbing
                 armVert.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 armVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 armVert.setPower(0.4);
                 most = armVert.getCurrentPosition();
             }
-            if (gamepad1.b){
+            if (gamepad1.b && most != medGoal){
                 armVert.setTargetPosition(200); //level at 0, grabbing
                 armVert.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 armVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                 armVert.setPower(0.4);
                 most = armVert.getCurrentPosition();
             }
-            if (gamepad1.y){
+            if (gamepad1.y && most != highGoal){
                 armVert.setTargetPosition(500); //level at 0, grabbing
                 armVert.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 armVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -130,7 +130,7 @@ public class TeleOp2 extends LinearOpMode {
                 most = armVert.getCurrentPosition();
             }
 
-
+*/
             //open the gripper on X button if not already at most open position.
             if (gamepad1.left_bumper && gripposR < maxposR) gripposR = gripposR + .01;
             //if (gamepad1.x && gripposL < maxposL) gripposL = gripposL + .01;
@@ -163,7 +163,7 @@ public class TeleOp2 extends LinearOpMode {
             frontRight.setPower(0.7*rightPower);
             backLeft.setPower(0.7*leftPower);
             backRight.setPower(0.7*rightPower);
-            //armVert.setPower(armVertPower);
+            armVert.setPower(armVertPower);
             //armHor.setPower(armHorPower);
 
             leftHand.setPosition(gripposR);
