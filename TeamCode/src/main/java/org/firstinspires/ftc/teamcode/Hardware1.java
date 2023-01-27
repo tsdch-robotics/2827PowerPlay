@@ -177,11 +177,25 @@ public class Hardware1 {
             rightHand.setPosition(MID_SERVO - offset);
         }
 
-        public void encoderDrive(double speed, double speed2, DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight, int targetPos1, int targetPos2){
+    public static void sleep(long mls) throws InterruptedException {
+
+    }
+
+    public void encoderDrive(double speed, double speed2, DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight, int targetPos1, int targetPos2){
             int newFrontLeftTarget;
             int newFrontRightTarget;
             int newBackLeftTarget;
             int newBackRightTarget;
+
+            frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             //newFrontLeftTarget = frontLeft.getCurrentPosition() + (int) (targetPos1 * COUNTS_PER_INCH);
             //newFrontRightTarget = frontRight.getCurrentPosition() + (int) (targetPos2 * COUNTS_PER_INCH);
@@ -199,8 +213,8 @@ public class Hardware1 {
             backRight.setTargetPosition(newBackRightTarget);
 
             frontLeft.setPower(speed);
-            frontRight.setPower(speed);
-            backLeft.setPower(speed2);
+            frontRight.setPower(speed2);
+            backLeft.setPower(speed);
             backRight.setPower(speed2);
 
             frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -217,7 +231,7 @@ public class Hardware1 {
                 backLeft.setPower(0);
             }
 
- */
+*/
         }
     }
 
