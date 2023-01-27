@@ -46,7 +46,7 @@ public class TeleOp2 extends LinearOpMode {
         leftHand = hardwareMap.get(Servo.class, "left_hand");
         //rightHand = hardwareMap.get(Servo.class, "right_hand");
 
-        double minposL = 0.4, maxposL = 0.73, minposR = 0, maxposR = 0.26;
+        double minposL = 0.4, maxposL = 0.73, minposR = 0.72, maxposR = 0.95;
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -65,7 +65,7 @@ public class TeleOp2 extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
-        double gripposL = 0.7, gripposR = 0.4;
+        double gripposL = 0.7, gripposR = 0.65;
         double adjustedPos = maxposR;
 
         // run until the end of the match (driver presses STOP)
@@ -94,11 +94,11 @@ public class TeleOp2 extends LinearOpMode {
 
             //set armvertpower
             if (gamepad1.left_trigger > 0) {
-                armVertPower = 0.9;
+                armVertPower = 1;
                 //armHorPower = 0.4;
             }
             else if (gamepad1.right_trigger > 0) {
-                armVertPower = -0.45;
+                armVertPower = -0.75;
                 //armHorPower = -0.25;
             }
             else {
