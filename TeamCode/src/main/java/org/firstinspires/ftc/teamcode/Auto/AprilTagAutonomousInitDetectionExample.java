@@ -44,6 +44,12 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
     int MIDDLE = 2;
     int RIGHT = 3;
 
+    static final double     COUNTS_PER_MOTOR_REV    = 537.7 ;    // eg: TETRIX Motor Encoder
+    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
+    static final double     WHEEL_DIAMETER_INCHES   = 3.78 ;     // For figuring circumference
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            (WHEEL_DIAMETER_INCHES * 3.5);
+
     //Auto motor and servo definitions
     private DcMotorEx frontLeft = null;
     private DcMotorEx frontRight = null;
@@ -56,10 +62,6 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    static final double     COUNTS_PER_MOTOR_REV    = 537.7 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
-    static final double     WHEEL_DIAMETER_INCHES   = 3.78 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.5);
     static final double DRIVE_SPEED = 0.6;
     static final double TURN_SPEED = 0.5;
     static final double ARM_SPEED_UP = 0.7;
@@ -210,7 +212,9 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
         /* Actually do something useful */
         if(tagOfInterest == null || tagOfInterest.id == LEFT) {
             //frontLeft.setPower(1);
-            robot.encoderDrive(0.8,0.8,100,100);
+            robot.encoderDrive(0.8,0.8, frontLeft, frontRight, backLeft, backRight, 5000,20000); //curve around pole
+            robot.encoderDrive(0.8,0.8, frontLeft, frontRight, backLeft, backRight, 200,300); //go to high pole
+            robot.encoderDrive(0.8,0.8, frontLeft, frontRight, backLeft, backRight, 100,100);
         }
         else if (tagOfInterest.id == MIDDLE) {
             //code
