@@ -68,6 +68,12 @@ public class Hardware1 {
     private Servo leftHand = null;
     private Servo rightHand = null;
 
+    static final double     COUNTS_PER_MOTOR_REV    = 537.7 ;    // eg: TETRIX Motor Encoder
+    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
+    static final double     WHEEL_DIAMETER_INCHES   = 3.78 ;     // For figuring circumference
+    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            (WHEEL_DIAMETER_INCHES * 3.5);
+
     // Define Drive constants.  Make them public so they CAN be used by the calling OpMode
     public static final double MID_SERVO = 0.5;
     public static final double HAND_SPEED = 0.02;  // sets rate to move servo
@@ -171,12 +177,26 @@ public class Hardware1 {
             rightHand.setPosition(MID_SERVO - offset);
         }
 
-        public void encoderDrive(double speed, double speed2, int targetPos1, int targetPos2 ){
+        public void encoderDrive(double speed, double speed2, DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight, int targetPos1, int targetPos2){
+            int newFrontLeftTarget;
+            int newFrontRightTarget;
+            int newBackLeftTarget;
+            int newBackRightTarget;
 
-            frontLeft.setTargetPosition(targetPos1);
-            frontRight.setTargetPosition(targetPos1);
-            backLeft.setTargetPosition(targetPos2);
-            backRight.setTargetPosition(targetPos2);
+            //newFrontLeftTarget = frontLeft.getCurrentPosition() + (int) (targetPos1 * COUNTS_PER_INCH);
+            //newFrontRightTarget = frontRight.getCurrentPosition() + (int) (targetPos2 * COUNTS_PER_INCH);
+            //newBackLeftTarget = backLeft.getCurrentPosition() + (int) (targetPos1 * COUNTS_PER_INCH);
+            //newBackRightTarget = backRight.getCurrentPosition() + (int) (targetPos2 * COUNTS_PER_INCH);
+
+            newFrontLeftTarget = targetPos1;
+            newFrontRightTarget = targetPos2;
+            newBackLeftTarget = targetPos1;
+            newBackRightTarget = targetPos2;
+
+            frontLeft.setTargetPosition(newFrontLeftTarget);
+            frontRight.setTargetPosition(newFrontRightTarget);
+            backLeft.setTargetPosition(newBackLeftTarget);
+            backRight.setTargetPosition(newBackRightTarget);
 
             frontLeft.setPower(speed);
             frontRight.setPower(speed);
@@ -187,7 +207,7 @@ public class Hardware1 {
             frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+/*
             if (!frontLeft.isBusy() && !frontRight.isBusy()) {
                 frontLeft.setPower(0);
                 frontRight.setPower(0);
@@ -196,6 +216,8 @@ public class Hardware1 {
                 backRight.setPower(0);
                 backLeft.setPower(0);
             }
+
+ */
         }
     }
 
