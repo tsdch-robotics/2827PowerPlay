@@ -216,7 +216,7 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
             robot.encoderDrive(0.8,0.8, frontLeft, frontRight, backLeft, backRight, 5000,20000); //curve around pole
             // sleep(200);
             robot.encoderDrive(0.8,0.8, frontLeft, frontRight, backLeft, backRight, 200,300); //go to high pole
-            robot.encoderDrive(0.8,0.8, frontLeft, frontRight, backLeft, backRight, 100,100);
+            //robot.encoderDrive(0.8,0.8, frontLeft, frontRight, backLeft, backRight, 100,100);
         }
         else if (tagOfInterest.id == MIDDLE) {
             //code
