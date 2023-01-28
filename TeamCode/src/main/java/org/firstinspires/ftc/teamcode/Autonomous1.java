@@ -68,7 +68,7 @@ public class Autonomous1 extends LinearOpMode {
     static final double openPos = 0.43;
     static final double closePos = 0.15;
 
-    private enum Direction {left, right;}
+    private enum Direction {left, right}
 
     @Override
     public void runOpMode() {
@@ -91,7 +91,7 @@ public class Autonomous1 extends LinearOpMode {
         backLeft.setDirection(DcMotor.Direction.FORWARD);
         backRight.setDirection(DcMotor.Direction.REVERSE);
 
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        /*frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -99,7 +99,7 @@ public class Autonomous1 extends LinearOpMode {
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);*/
 
         // Send telemetry message to indicate successful Encoder reset
         telemetry.addData("Starting at",  "%7d :%7d",
@@ -118,14 +118,14 @@ public class Autonomous1 extends LinearOpMode {
         sleep(1000);
         encoderDrive(DRIVE_SPEED, ARM_SPEED_UP, 49, 49, 20, 5.0);
         staticArm(ARM_SPEED_HOLD, 50, 2);
-        encoderDrive(DRIVE_SPEED, ARM_SPEED_DOWN, 49, 49, 20, 5.0);
+        encoderDrive(DRIVE_SPEED, ARM_SPEED_DOWN, 7, 25, 20, 5.0);
 
         /*
         encoderStrafe(.3, 20, Direction.left, 3.0);
         encoderStrafe(.3, 20, Direction.right, 3.0);
         encoderStrafe(.3, 20, Direction.left, 3.0);
         encoderStrafe(.3, 20, Direction.right, 3.0);
-*/
+        */
 
 
 
