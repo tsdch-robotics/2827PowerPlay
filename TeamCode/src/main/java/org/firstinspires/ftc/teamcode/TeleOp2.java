@@ -18,7 +18,6 @@ public class  TeleOp2 extends LinearOpMode {
     private DcMotor backLeft = null;
     private DcMotor backRight = null;
     private DcMotor armVert = null;
-    //private DcMotor armHor = null;
 
     private Servo leftHand = null;
     private Servo rightHand = null;
@@ -41,12 +40,8 @@ public class  TeleOp2 extends LinearOpMode {
         backLeft  = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
         armVert = hardwareMap.get(DcMotor.class, "armVert");
-        //armHor = hardwareMap.get(DcMotor.class, "armHor");
 
         leftHand = hardwareMap.get(Servo.class, "left_hand");
-        //rightHand = hardwareMap.get(Servo.class, "right_hand");
-
-        double minposL = 0.4, maxposL = 0.73, minposR = 0.72, maxposR = 0.95;
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -55,15 +50,13 @@ public class  TeleOp2 extends LinearOpMode {
         frontRight.setDirection(DcMotor.Direction.FORWARD);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.FORWARD);
-/*
-        armVert.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armVert.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-*/
 
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
+
+        double minposL = 0.4, maxposL = 0.73, minposR = 0.72, maxposR = 0.95;
 
         double gripposL = 0.7, gripposR = 0.65;
         double adjustedPos = maxposR;
@@ -75,10 +68,7 @@ public class  TeleOp2 extends LinearOpMode {
             double leftPower;
             double rightPower;
             double armVertPower;
-            double armHorPower;
-
-            // Choose to drive using either Tank Mode, or POV Mode
-            // Comment out the method that's not used.  The default below is POV.
+            .
 
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
@@ -95,85 +85,31 @@ public class  TeleOp2 extends LinearOpMode {
             //set armvertpower
             if (gamepad1.left_trigger > 0) {
                 armVertPower = 1;
-                //armHorPower = 0.4;
             }
             else if (gamepad1.right_trigger > 0) {
                 armVertPower = -0.75;
-                //armHorPower = -0.25;
             }
             else {
                 armVertPower = 0.08;
-                //armHorPower = 0.15;
-            }
-/*
-            //0.23
-
-            if (gamepad1.a && most != lowGoal){
-                armVert.setTargetPosition(0); //level at 0, grabbing
-                armVert.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                armVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                armVert.setPower(0.4);
-                most = armVert.getCurrentPosition();
-            }
-            if (gamepad1.b && most != medGoal){
-                armVert.setTargetPosition(200); //level at 0, grabbing
-                armVert.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                armVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                armVert.setPower(0.4);
-                most = armVert.getCurrentPosition();
-            }
-            if (gamepad1.y && most != highGoal){
-                armVert.setTargetPosition(500); //level at 0, grabbing
-                armVert.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                armVert.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                armVert.setPower(0.4);
-                most = armVert.getCurrentPosition();
             }
 
-*/
             //open the gripper on X button if not already at most open position.
             if (gamepad1.left_bumper && gripposR < maxposR) gripposR = gripposR + .01;
-            //if (gamepad1.x && gripposL < maxposL) gripposL = gripposL + .01;
 
             // close the gripper on Y button if not already at the closed position.
-            //if (gamepad1.y && gripposL > minposL) gripposL = gripposL - .01;
             if (gamepad1.right_bumper && gripposR > minposR) gripposR = gripposR - .01;
 
-/*
-            if (gamepad1.dpad_left && adjustedPos = maxPos) {
-                gripposR = gripposR + 0.05;
-                maxposR = maxposR + 0.05;
-            }
-            else {
-                gripposR = gripposR;
-                maxposR = maxposR;
-            }
-            if (gamepad1.dpad_right) {
-                gripposR = gripposR - 0.05;
-                minposR = minposR - 0.05;
-            }
-            else {
-                gripposR = gripposR;
-                minposR = minposR;
-            }
-
-*/
             // Send power to wheels, arms, and servos
             frontLeft.setPower(0.7*leftPower);
             frontRight.setPower(0.7*rightPower);
             backLeft.setPower(0.7*leftPower);
             backRight.setPower(0.7*rightPower);
             armVert.setPower(armVertPower);
-            //armHor.setPower(armHorPower);
 
             leftHand.setPosition(gripposR);
-            //rightHand.setPosition(gripposR);
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            //telemetry.addData("Motors", "left (%.2f), right (%.2f)", left, right);
-            //telemetry.addData("Uncontrollable farting", "I cant stop the farting oh my god");
-
             telemetry.update();
         }
     }
