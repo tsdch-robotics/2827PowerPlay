@@ -68,7 +68,7 @@ public class  TeleOp2 extends LinearOpMode {
             double leftPower;
             double rightPower;
             double armVertPower;
-            .
+            
 
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
