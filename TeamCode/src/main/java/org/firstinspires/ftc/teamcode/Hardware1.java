@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
@@ -39,11 +40,11 @@ public class Hardware1 {
     private LinearOpMode myOpMode = null;   // gain access to methods in the calling OpMode.
 
     // Define Motor and Servo objects  (Make them private so they can't be accessed externally)
-    private DcMotor frontLeft = null;
-    private DcMotor frontRight = null;
-    private DcMotor backLeft = null;
-    private DcMotor backRight = null;
-    private DcMotor armVert = null;
+    private DcMotorEx frontLeft = null;
+    private DcMotorEx frontRight = null;
+    private DcMotorEx backLeft = null;
+    private DcMotorEx backRight = null;
+    private DcMotorEx armVert = null;
     private Servo leftHand = null;
     private Servo rightHand = null;
 
@@ -54,10 +55,11 @@ public class Hardware1 {
             (WHEEL_DIAMETER_INCHES * 3.5);
 
     // Define Drive constants.  Make them public so they CAN be used by the calling OpMode
-    public static final double MID_SERVO = 0.5;
-    public static final double HAND_SPEED = 0.02;  // sets rate to move servo
-    public static final double ARM_UP_POWER = 0.45;
-    public static final double ARM_DOWN_POWER = -0.45;
+    static final double DRIVE_SPEED = 0.6;
+    static final double TURN_SPEED = 0.5;
+    static final double ARM_SPEED_UP = 0.7;
+    static final double ARM_SPEED_DOWN = -0.35;
+    static final double ARM_SPEED_HOLD = 0.08;;
 
     // Define a constructor that allows the OpMode to pass a reference to itself.
 
@@ -69,23 +71,21 @@ public class Hardware1 {
          */
         public void init () {
             // Define and Initialize Motors (note: need to use reference to actual OpMode).
-            frontLeft = myOpMode.hardwareMap.get(DcMotor.class, "frontLeft");
-            frontRight = myOpMode.hardwareMap.get(DcMotor.class, "frontRight");
-            backLeft = myOpMode.hardwareMap.get(DcMotor.class, "backLeft");
-            backRight = myOpMode.hardwareMap.get(DcMotor.class, "backRight");
-            armVert = myOpMode.hardwareMap.get(DcMotor.class, "armVert");
+            frontLeft = myOpMode.hardwareMap.get(DcMotorEx.class, "frontLeft");
+            frontRight = myOpMode.hardwareMap.get(DcMotorEx.class, "frontRight");
+            backLeft = myOpMode.hardwareMap.get(DcMotorEx.class, "backLeft");
+            backRight = myOpMode.hardwareMap.get(DcMotorEx.class, "backRight");
+            armVert = myOpMode.hardwareMap.get(DcMotorEx.class, "armVert");
 
             // set motor directions
-            frontLeft.setDirection(DcMotor.Direction.FORWARD);
-            frontRight.setDirection(DcMotor.Direction.REVERSE);
-            backLeft.setDirection(DcMotor.Direction.FORWARD);
-            backRight.setDirection(DcMotor.Direction.REVERSE);
+            frontLeft.setDirection(DcMotorEx.Direction.FORWARD);
+            frontRight.setDirection(DcMotorEx.Direction.REVERSE);
+            backLeft.setDirection(DcMotorEx.Direction.FORWARD);
+            backRight.setDirection(DcMotorEx.Direction.REVERSE);
 
             //
             leftHand = myOpMode.hardwareMap.get(Servo.class, "left_hand");
             rightHand = myOpMode.hardwareMap.get(Servo.class, "right_hand");
-            leftHand.setPosition(MID_SERVO);
-            rightHand.setPosition(MID_SERVO);
 
             myOpMode.telemetry.addData(">", "Hardware Initialized");
             myOpMode.telemetry.update();
@@ -138,71 +138,45 @@ public class Hardware1 {
             armVert.setPower(power);
         }
 
-        /**
-         * Send the two hand-servos to opposing (mirrored) positions, based on the passed offset.
-         *
-         * @param offset
-         */
-        public void setHandPositions ( double offset){
-            offset = Range.clip(offset, -0.5, 0.5);
-            leftHand.setPosition(MID_SERVO + offset);
-            rightHand.setPosition(MID_SERVO - offset);
-        }
-
     public static void sleep(long mls) throws InterruptedException {
 
     }
 
-    public void encoderDrive(double speed, double speed2, DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight, int targetPos1, int targetPos2){
-            int newFrontLeftTarget;
-            int newFrontRightTarget;
-            int newBackLeftTarget;
-            int newBackRightTarget;
+    public void encoderDrive(double speed, double speed2, DcMotorEx frontLeft, DcMotorEx frontRight, DcMotorEx backLeft, DcMotorEx backRight, int targetPos1, int targetPos2) {
+        int newFrontLeftTarget;
+        int newFrontRightTarget;
+        int newBackLeftTarget;
+        int newBackRightTarget;
 
-            /*frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);*/
+        /*frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);*/
 
-            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        backLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        backRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        armVert.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-            //newFrontLeftTarget = frontLeft.getCurrentPosition() + (int) (targetPos1 * COUNTS_PER_INCH);
-            //newFrontRightTarget = frontRight.getCurrentPosition() + (int) (targetPos2 * COUNTS_PER_INCH);
-            //newBackLeftTarget = backLeft.getCurrentPosition() + (int) (targetPos1 * COUNTS_PER_INCH);
-            //newBackRightTarget = backRight.getCurrentPosition() + (int) (targetPos2 * COUNTS_PER_INCH);
+        newFrontLeftTarget = frontLeft.getCurrentPosition() + (int) (targetPos1 * COUNTS_PER_INCH);
+        newFrontRightTarget = frontRight.getCurrentPosition() + (int) (targetPos2 * COUNTS_PER_INCH);
+        newBackLeftTarget = backLeft.getCurrentPosition() + (int) (targetPos1 * COUNTS_PER_INCH);
+        newBackRightTarget = backRight.getCurrentPosition() + (int) (targetPos2 * COUNTS_PER_INCH);
 
-            newFrontLeftTarget = targetPos1;
-            newFrontRightTarget = targetPos2;
-            newBackLeftTarget = targetPos1;
-            newBackRightTarget = targetPos2;
+        frontLeft.setTargetPosition(newFrontLeftTarget);
+        frontRight.setTargetPosition(newFrontRightTarget);
+        backLeft.setTargetPosition(newBackLeftTarget);
+        backRight.setTargetPosition(newBackRightTarget);
 
-            frontLeft.setTargetPosition(newFrontLeftTarget);
-            frontRight.setTargetPosition(newFrontRightTarget);
-            backLeft.setTargetPosition(newBackLeftTarget);
-            backRight.setTargetPosition(newBackRightTarget);
+        frontLeft.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        frontRight.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        backLeft.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        backRight.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
-            frontLeft.setPower(speed);
-            frontRight.setPower(speed2);
-            backLeft.setPower(speed);
-            backRight.setPower(speed2);
-
-            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            /*
-            if (!frontLeft.isBusy() && !frontRight.isBusy()) {
-                frontLeft.setPower(0);
-                frontRight.setPower(0);
-            }
-            if (!backLeft.isBusy() && !backRight.isBusy()) {
-                backRight.setPower(0);
-                backLeft.setPower(0);
-            }
-
-           */
+        frontLeft.setPower(speed);
+        frontRight.setPower(speed2);
+        backLeft.setPower(speed);
+        backRight.setPower(speed2);
         }
     }
