@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -12,6 +13,8 @@ import org.firstinspires.ftc.teamcode.Hardware1;
 
 @TeleOp(name="TeleOp2", group="Linear Opmode")
 public class  TeleOp2 extends LinearOpMode {
+
+    FtcDashboard dashboard;
 
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -39,6 +42,8 @@ public class  TeleOp2 extends LinearOpMode {
     public void runOpMode() {
         telemetry.addData("Status", "Initialized yuh");
         telemetry.update();
+
+        dashboard = FtcDashboard.getInstance();
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
