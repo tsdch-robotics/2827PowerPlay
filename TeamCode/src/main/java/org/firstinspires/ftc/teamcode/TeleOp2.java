@@ -28,8 +28,8 @@ public class  TeleOp2 extends LinearOpMode {
     private Servo rightHand = null;
 
     final int highGoal = 4000;
-    final int medGoal = 2500;
-    final int lowGoal = 1100;
+    final int medGoal = 2800;
+    final int lowGoal = 1300;
     final int pickup = 0;
     private int most = 0;
 
@@ -95,7 +95,7 @@ public class  TeleOp2 extends LinearOpMode {
             if (gamepad1.a) {
                 armVert.setTargetPosition(lowGoal);
                 if (armVert.getCurrentPosition() > lowGoal) {
-                    armVert.setPower(-0.3);
+                    armVert.setPower(-0.45);
                 }
                 if (armVert.getCurrentPosition() < lowGoal) {
                     armVert.setPower(0.8);
@@ -104,7 +104,7 @@ public class  TeleOp2 extends LinearOpMode {
             if (gamepad1.b) {
                 armVert.setTargetPosition(medGoal);
                 if (armVert.getCurrentPosition() > medGoal) {
-                    armVert.setPower(-0.3);
+                    armVert.setPower(-0.45);
                 }
                 if (armVert.getCurrentPosition() < medGoal) {
                     armVert.setPower(0.8);
@@ -113,7 +113,7 @@ public class  TeleOp2 extends LinearOpMode {
             if (gamepad1.y) {
                 armVert.setTargetPosition(highGoal);
                 if (armVert.getCurrentPosition() > highGoal) {
-                    armVert.setPower(-0.3);
+                    armVert.setPower(-0.45);
                 }
                 if (armVert.getCurrentPosition() < highGoal) {
                     armVert.setPower(0.8);
@@ -122,7 +122,7 @@ public class  TeleOp2 extends LinearOpMode {
             if (gamepad1.right_stick_button) {
                 armVert.setTargetPosition(pickup);
                 if (armVert.getCurrentPosition() > pickup) {
-                    armVert.setPower(-0.3);
+                    armVert.setPower(-0.45);
                 }
                 if (armVert.getCurrentPosition() < pickup) {
                     armVert.setPower(0.8);
