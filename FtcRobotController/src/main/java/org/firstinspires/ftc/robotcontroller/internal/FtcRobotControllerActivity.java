@@ -334,7 +334,7 @@ public class FtcRobotControllerActivity extends Activity
         popupMenu.inflate(R.menu.ftc_robot_controller);
         AnnotatedHooksClassFilter.getInstance().callOnCreateMenuMethods(
             FtcRobotControllerActivity.this, popupMenu.getMenu());
-        FtcDashboard.populateMenu(popupMenu.getMenu());
+        //FtcDashboard.populateMenu(popupMenu.getMenu());
         popupMenu.show();
       }
     });
@@ -411,7 +411,7 @@ public class FtcRobotControllerActivity extends Activity
     checkPreferredChannel();
 
     AnnotatedHooksClassFilter.getInstance().callOnCreateMethods(this);
-    FtcDashboard.start();
+    //FtcDashboard.start();
   }
 
   protected UpdateUI createUpdateUI() {
@@ -485,7 +485,7 @@ public class FtcRobotControllerActivity extends Activity
     RobotLog.cancelWriteLogcatToDisk();
 
     AnnotatedHooksClassFilter.getInstance().callOnDestroyMethods(this);
-    FtcDashboard.stop();
+    //FtcDashboard.stop();
   }
 
   protected void bindToService() {
@@ -529,7 +529,7 @@ public class FtcRobotControllerActivity extends Activity
   public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.ftc_robot_controller, menu);
     AnnotatedHooksClassFilter.getInstance().callOnCreateMenuMethods(this, menu);
-    FtcDashboard.populateMenu(menu);
+    //FtcDashboard.populateMenu(menu);
     return true;
   }
 
@@ -695,7 +695,7 @@ public class FtcRobotControllerActivity extends Activity
         return service.getRobot().eventLoopManager;
       }
     });
-    FtcDashboard.attachWebServer(service.getWebServer());
+    //FtcDashboard.attachWebServer(service.getWebServer());
 
     AnnotatedHooksClassFilter.getInstance().callWebHandlerRegistrarMethods(this,
         service.getWebServer().getWebHandlerManager());
@@ -732,7 +732,7 @@ public class FtcRobotControllerActivity extends Activity
       } catch (FileNotFoundException | XmlPullParserException e1) {
         RobotLog.ee(TAG, e1, "Failed to fall back on noConfig");
       }
-      FtcDashboard.attachEventLoop(eventLoop);
+      //FtcDashboard.attachEventLoop(eventLoop);
     }
 
     OpModeRegister userOpModeRegister = createOpModeRegister();
