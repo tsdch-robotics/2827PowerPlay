@@ -66,13 +66,13 @@ public class  TeleOp2 extends LinearOpMode {
         backRight.setDirection(DcMotorEx.Direction.FORWARD);
         //armVert.setDirection(DcMotorEx.Direction.REVERSE);
 
-        armVert.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        //armVert.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
-        armVert.setTargetPosition(pickup);
-        armVert.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        //armVert.setTargetPosition(pickup);
+        //armVert.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         runtime.reset();
 
         // run until the end of the match (driver presses STOP)
@@ -91,7 +91,7 @@ public class  TeleOp2 extends LinearOpMode {
 
             //leftPower  = gamepad1.left_stick_y ;
             //rightPower = gamepad1.right_stick_y ;
-
+/*
             if (gamepad1.a) {
                 armVert.setTargetPosition(lowGoal);
                 if (armVert.getCurrentPosition() > lowGoal) {
@@ -128,10 +128,10 @@ public class  TeleOp2 extends LinearOpMode {
                     armVert.setPower(0.8);
                 }
             }
-
+*/
             //set armvertpower
             if (gamepad1.left_trigger > 0) {
-                armVert.setPower(-0.3);
+                armVert.setPower(-0.45);
             }
             if (gamepad1.right_trigger > 0) {
                 armVert.setPower(0.8);
