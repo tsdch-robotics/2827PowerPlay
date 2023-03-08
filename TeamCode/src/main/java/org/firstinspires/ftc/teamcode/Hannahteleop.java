@@ -17,14 +17,14 @@ import org.firstinspires.ftc.robotcontroller.external.samples.BasicOmniOpMode_Li
 
 
 @TeleOp()
-public class Hannahteleop extends {
+public class Hannahteleop extends{
     Hardware1 robot = new Hardware1();
 
     @Override
     public boolean equals(@Nullable Object obj) {
         return super.equals(obj);
     }
-}
+
     public void init() {
         double motorSpeed = 0.5;
         robot.init(Hardware1);
