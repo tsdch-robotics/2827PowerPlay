@@ -17,22 +17,45 @@ import org.firstinspires.ftc.robotcontroller.external.samples.BasicOmniOpMode_Li
 
 
 @TeleOp()
-public class Hannahteleop extends{
+public class Hannahteleop extends LinearOpMode {
     Hardware1 robot = new Hardware1();
+
+    DcMotorEx frontLeft;
+    DcMotorEx frontRight;
+    DcMotorEx backLeft;
+    DcMotorEx backRight;
+
 
     @Override
     public boolean equals(@Nullable Object obj) {
         return super.equals(obj);
     }
 
-    public void init() {
+    public void runOpMode() {
         double motorSpeed = 0.5;
-        robot.init(Hardware1);
 
+        frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
+        frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
+        backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
+        backRight = hardwareMap.get(DcMotorEx.class, "backRight");
 
+        if (gamepad1.left_stick_y > 0) {
+            frontLeft.setPower(motorSpeed);
+            backLeft.setPower(motorSpeed);
+        } else if (gamepad1.left_stick_y < 0) {
+            frontLeft.setPower(-motorSpeed);
+            backLeft.setPower(-motorSpeed);
+        }
+
+        if (gamepad1.right_stick_y > 0) {
+            frontRight.setPower(motorSpeed);
+            backRight.setPower(motorSpeed);
+        } else if (gamepad1.right_stick_y < 0) {
+            frontRight.setPower(-motorSpeed);
+            backRight.setPower(-motorSpeed);
+        }
 
     }
+
 }
-
-
 
